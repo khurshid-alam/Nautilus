@@ -1,8 +1,6 @@
-Index: nautilus/configure.ac
-===================================================================
---- nautilus.orig/configure.ac
-+++ nautilus/configure.ac
-@@ -12,6 +12,8 @@ m4_define(exempi_minver,               2
+--- a/configure.ac
++++ b/configure.ac
+@@ -12,6 +12,8 @@
  m4_define(notify_minver,               0.7.0)
  m4_define(schemas_minver,              3.8.0)
  m4_define(autoar_minver,               0.2.1)
@@ -11,7 +9,7 @@ Index: nautilus/configure.ac
  
  dnl 1. If the library code has changed at all since last release, then increment revision.
  dnl 2. If any interfaces have been added, then increment current and set revision to 0.
-@@ -191,6 +193,27 @@ if test "x$enable_packagekit" != "xno";
+@@ -182,6 +184,27 @@
  	AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable PackageKit mimetype installer])
  fi
  
@@ -39,7 +37,7 @@ Index: nautilus/configure.ac
  dnl ==========================================================================
  
  dnl Turn on the additional warnings last, so -Werror doesn't affect other tests.
-@@ -350,6 +373,7 @@ nautilus-$VERSION:
+@@ -333,6 +356,7 @@
  	libexif support:	${enable_exif}
  	libexempi support:	${enable_xmp}
  	PackageKit support:     $msg_packagekit
@@ -47,11 +45,9 @@ Index: nautilus/configure.ac
  	nautilus-sendto ext:	$enable_nst_extension
  	Tracker support:	$enable_tracker
  	desktop support:	$enable_desktop
-Index: nautilus/src/Makefile.am
-===================================================================
---- nautilus.orig/src/Makefile.am
-+++ nautilus/src/Makefile.am
-@@ -26,6 +26,7 @@ AM_CPPFLAGS =							\
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -26,6 +26,7 @@
  	-DNAUTILUS_EXTENSIONDIR=\""$(libdir)/nautilus/extensions-3.0"\" \
  	-DPREFIX=\""$(prefix)"\" 				\
  	-DVERSION="\"$(VERSION)\"" 				\
@@ -59,7 +55,7 @@ Index: nautilus/src/Makefile.am
  	$(DISABLE_DEPRECATED) 		                        \
  	$(NULL)
  
-@@ -42,6 +43,7 @@ libnautilus_la_LIBADD =\
+@@ -42,6 +43,7 @@
  	$(EXIF_LIBS) \
  	$(EXEMPI_LIBS) \
  	$(POPT_LIBS) \
@@ -67,7 +63,7 @@ Index: nautilus/src/Makefile.am
  	$(TRACKER_LIBS) \
  	$(SELINUX_LIBS) \
  	$(top_builddir)/eel/libeel-2.la \
-@@ -336,6 +338,10 @@ nautilus_no_main_sources = \
+@@ -356,6 +358,10 @@
  	nautilus-file-undo-operations.h \
  	nautilus-file-undo-manager.c \
  	nautilus-file-undo-manager.h \
@@ -78,13 +74,11 @@ Index: nautilus/src/Makefile.am
  	$(nautilus_tracker_engine_sources)	\
  	$(nautilus_batch_renaming_tracker_sources)	\
  	$(NULL)
-Index: nautilus/src/nautilus-toolbar.c
-===================================================================
---- nautilus.orig/src/nautilus-toolbar.c
-+++ nautilus/src/nautilus-toolbar.c
-@@ -37,6 +37,10 @@
- #include "nautilus-file-undo-manager.h"
- #include "nautilus-toolbar-menu-sections.h"
+--- a/src/nautilus-toolbar.c
++++ b/src/nautilus-toolbar.c
+@@ -40,6 +40,10 @@
+ #include "animation/ide-box-theatric.h"
+ #include "animation/egg-animation.h"
  
 +#ifdef HAVE_UNITY
 +#include <unity.h>
@@ -93,7 +87,7 @@ Index: nautilus/src/nautilus-toolbar.c
  #include <glib/gi18n.h>
  #include <math.h>
  
-@@ -93,6 +97,7 @@ struct _NautilusToolbar
+@@ -99,6 +103,7 @@
      NautilusWindowSlot *active_slot;
      GBinding *icon_binding;
      GBinding *view_widget_binding;
@@ -101,7 +95,7 @@ Index: nautilus/src/nautilus-toolbar.c
  };
  
  enum
-@@ -440,6 +445,9 @@ on_remove_finished_operations_timeout (N
+@@ -388,6 +393,9 @@
      {
          gtk_revealer_set_reveal_child (GTK_REVEALER (self->operations_revealer),
                                         FALSE);
@@ -111,7 +105,7 @@ Index: nautilus/src/nautilus-toolbar.c
      }
      else
      {
-@@ -626,6 +634,10 @@ update_operations (NautilusToolbar *self
+@@ -574,6 +582,10 @@
                                         TRUE);
          gtk_widget_queue_draw (self->operations_icon);
  
@@ -122,7 +116,7 @@ Index: nautilus/src/nautilus-toolbar.c
          /* Show the popover at start to increase visibility.
           * Check whether the toolbar is visible or not before showing the
           * popover. This can happens if the window has the disables-chrome
-@@ -769,6 +781,10 @@ on_operations_icon_draw (GtkWidget
+@@ -741,6 +753,10 @@
      }
  
  
@@ -133,7 +127,7 @@ Index: nautilus/src/nautilus-toolbar.c
      width = gtk_widget_get_allocated_width (widget);
      height = gtk_widget_get_allocated_height (widget);
  
-@@ -915,6 +931,9 @@ nautilus_toolbar_init (NautilusToolbar *
+@@ -895,6 +911,9 @@
                         self->location_entry);
  
      self->progress_manager = nautilus_progress_info_manager_dup_singleton ();
@@ -143,10 +137,8 @@ Index: nautilus/src/nautilus-toolbar.c
      g_signal_connect (self->progress_manager, "new-progress-info",
                        G_CALLBACK (on_new_progress_info), self);
      g_signal_connect (self->progress_manager, "has-viewers-changed",
-Index: nautilus/src/nautilus-application.c
-===================================================================
---- nautilus.orig/src/nautilus-application.c
-+++ nautilus/src/nautilus-application.c
+--- a/src/nautilus-application.c
++++ b/src/nautilus-application.c
 @@ -54,6 +54,10 @@
  #define DEBUG_FLAG NAUTILUS_DEBUG_APPLICATION
  #include "nautilus-debug.h"
@@ -158,7 +150,7 @@ Index: nautilus/src/nautilus-application.c
  #include <sys/types.h>
  #include <sys/stat.h>
  #include <fcntl.h>
-@@ -1245,6 +1249,10 @@ nautilus_application_startup (GApplicati
+@@ -1275,6 +1279,10 @@
      nautilus_application_startup_common (self);
  
      nautilus_profile_end (NULL);
@@ -169,10 +161,8 @@ Index: nautilus/src/nautilus-application.c
  }
  
  static gboolean
-Index: nautilus/src/unity-bookmarks-handler.c
-===================================================================
 --- /dev/null
-+++ nautilus/src/unity-bookmarks-handler.c
++++ b/src/unity-bookmarks-handler.c
 @@ -0,0 +1,148 @@
 +/*unity-bookmarks-handler.c: handle Unity bookmark for quicklist
 + *
@@ -322,10 +312,8 @@ Index: nautilus/src/unity-bookmarks-handler.c
 +                      G_CALLBACK (unity_bookmarks_handler_refresh_bookmarks), 0);
 +}
 +
-Index: nautilus/src/unity-bookmarks-handler.h
-===================================================================
 --- /dev/null
-+++ nautilus/src/unity-bookmarks-handler.h
++++ b/src/unity-bookmarks-handler.h
 @@ -0,0 +1,31 @@
 +/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 +/*
@@ -358,11 +346,9 @@ Index: nautilus/src/unity-bookmarks-handler.h
 +void unity_bookmarks_handler_initialize (void);
 +
 +#endif /* __UNITY_BOOKMARKS_HANDLER_H__*/
-Index: nautilus/src/unity-quicklist-handler.c
-===================================================================
 --- /dev/null
-+++ nautilus/src/unity-quicklist-handler.c
-@@ -0,0 +1,154 @@
++++ b/src/unity-quicklist-handler.c
+@@ -0,0 +1,163 @@
 +/*unity-quicklist-handler.c: handle Unity quicklists
 + *
 + * Copyright (C) 2012 Canonical
@@ -526,10 +512,8 @@ Index: nautilus/src/unity-quicklist-handler.c
 +{
 +    return g_object_new (UNITY_TYPE_QUICKLIST_HANDLER, NULL);
 +}
-Index: nautilus/src/unity-quicklist-handler.h
-===================================================================
 --- /dev/null
-+++ nautilus/src/unity-quicklist-handler.h
++++ b/src/unity-quicklist-handler.h
 @@ -0,0 +1,72 @@
 +/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 +/*
