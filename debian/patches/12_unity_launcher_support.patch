@@ -5,7 +5,7 @@ Index: nautilus/configure.ac
 @@ -12,6 +12,8 @@ m4_define(exempi_minver,               2
  m4_define(notify_minver,               0.7.0)
  m4_define(schemas_minver,              3.8.0)
- m4_define(autoar_minver,               0.1)
+ m4_define(autoar_minver,               0.2.1)
 +m4_define(unity_minver,                4.0.0)
 +m4_define(dbusmenu_minver,             0.4.90)
  
@@ -517,6 +517,15 @@ Index: nautilus/src/unity-quicklist-handler.c
 +    if (!unity_quicklist_handler_singleton)
 +    {
 +        unity_quicklist_handler_singleton = unity_quicklist_handler_new ();
++    }
++    return unity_quicklist_handler_singleton;
++}
++
++UnityQuicklistHandler *
++unity_quicklist_handler_new (void)
++{
++    return g_object_new (UNITY_TYPE_QUICKLIST_HANDLER, NULL);
++}
 Index: nautilus/src/unity-quicklist-handler.h
 ===================================================================
 --- /dev/null
