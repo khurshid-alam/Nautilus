@@ -2,7 +2,7 @@ multiarch_fallback.patch
 03_translations_list_update.patch
 04_suppress_umount_in_ltsp.patch
 06_never_exec_nonexec_launchers.patch
-#12_unity_launcher_support.patch
+12_unity_launcher_support.patch
 18_unity_icon_color.patch
 19_unity_open_location_xid.patch
 20_add_timestamp_to_operations.patch
